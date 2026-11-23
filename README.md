@@ -113,3 +113,6 @@ npm install bootstrap bootstrap-icons
 ```
 
 
+
+## React 컴포넌트 구조
+![alt text](assets/image.png)
