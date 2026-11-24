@@ -1,10 +1,24 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
 import { api } from '../api.js'
 
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem('access_token'))
+  const [user, setUser] = useState(null)
+
+  useEffect(() => { 
+    async function load() { 
+      if (!token) return 
+      try {
+        setUser(await api('/api/auth/me', { headers: {Authorization: `Bearer ${token}`} }))
+      } catch (e) {
+        logout()
+      }
+    }
+    load()
+  }, [token])
+
   
   async function login(username, password) { 
     const data = await api('/api/auth/login', {
@@ -20,10 +34,11 @@ export function AuthProvider({ children }) {
 
   function logout() { 
     setToken(null)
+    setUser(null)
     localStorage.removeItem('access_token')
   }
 
-  return <AuthContext value={{token, login, logout}} >{ children }</AuthContext>
+  return <AuthContext value={{token, user, login, logout}} >{ children }</AuthContext>
 }
 
 
