@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { api } from '../api.js'
-import { useNavigate } from 'react-router'
+import { useNavigate, Link } from 'react-router'
 import { useAuth } from '../hooks/useAuth.jsx'
 
 function Login() { 
@@ -44,6 +44,7 @@ function Login() {
         </form>
         {error && <p className="text-danger" >{error}</p> }
       </div>
+      <p className="mt-3"><Link to="/signup">가입하기</Link></p>
     </>
   )
 }

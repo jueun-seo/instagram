@@ -3,6 +3,7 @@ import PostList from './routes/PostList.jsx'
 import PostDetail from './routes/PostDetail.jsx'
 import Login from './routes/Login.jsx'
 import RequireLogin from './components/RequireLogin.jsx'
+import Signup from './routes/Signup.jsx'
 
 import { Routes, Route } from 'react-router'
 
@@ -18,7 +19,9 @@ function App() {
                 <Route path="/" element={<PostList />} />
                 <Route path="/posts/:id" element={ <PostDetail/>} />
               </Route>
-              <Route path="/login" element={ <Login /> } />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              
             </Routes>
           </main>
         </div>
