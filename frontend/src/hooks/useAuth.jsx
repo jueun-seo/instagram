@@ -52,8 +52,12 @@ export function AuthProvider({ children }) {
     // localStorage.setItem('access_token', data.access_token)
   }
 
-  function logout() { 
+  async function logout() { 
+    // 쿠키삭제
+    await api('/api/auth/logout', {method: 'POST', credentials: 'include'})
+    // access_token 삭제
     setToken(null)
+    // 유저정보 삭제
     setUser(null)
     // localStorage.removeItem('access_token')
   }
