@@ -42,7 +42,7 @@ function Login() {
           <input className="form-control" type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="비밀번호" required />
           <button className="btn btn-primary">로그인</button>
         </form>
-        {error && <p class="text-danger" >{error}</p> }
+        {error && <p className="text-danger" >{error}</p> }
       </div>
     </>
   )
