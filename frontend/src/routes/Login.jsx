@@ -42,14 +42,14 @@ function Login() {
           <input className="form-control" type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="비밀번호" required />
           <button className="btn btn-primary">로그인</button>
         </form>
-        <div className="d-grid gap-2 mt-343">
-            <a className="btn btn-outline-dark" href={`${SERVER_URL}/api/auth/google/login`}>
-                <i className="bi bi-google"></i>구글로 로그인
-            </a>
+        <div className="d-grid gap-2 mt-3">
+          <a className="btn btn-outline-dark" href={`${SERVER_URL}/api/auth/google/login`}>
+            <i className="bi bi-google"></i>구글로 로그인
+          </a>
         </div>
         {error && <p className="text-danger" >{error}</p> }
+        <p className="mt-3"><Link to="/signup">가입하기</Link></p>
       </div>
-      <p className="mt-3"><Link to="/signup">가입하기</Link></p>
     </>
   )
 }

@@ -1,4 +1,3 @@
-import os
 from fastapi import FastAPI
 from routers import posts, auth, likes, comments, uploads, social
 from fastapi.staticfiles import StaticFiles
@@ -13,7 +12,7 @@ app.add_middleware(
   allow_origins=[
     'http://localhost:5173',
   ],
-  allow_headers=['Authorization', 'Content-Type'],
+  allow_headers=['Authorization'],
   allow_credentials=True,
   allow_methods=['*']
 )
@@ -25,5 +24,4 @@ app.include_router(comments.router)
 app.include_router(uploads.router)
 app.include_router(social.router)
 
-os.makedirs('media', exist_ok=True)
 app.mount('/media', StaticFiles(directory='media'))
