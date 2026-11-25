@@ -32,7 +32,11 @@ function PostDetail() {
       <h3>댓글</h3>
       <ul className="list-group">
         {comments.map(c => (
-          <CommentItem key={c.id} {...c} />
+          <CommentItem
+            key={c.id}
+            {...c}
+            onDelete={id => setComments(comments.filter(x => x.id !== id))}
+          />
         )) }
       </ul>
       <CommentForm postId={id} onCreate={c => setComments([...comments, c])} />
