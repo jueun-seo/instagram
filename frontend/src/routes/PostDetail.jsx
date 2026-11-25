@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { api } from '../api.js'
 import PostCard from '../components/PostCard.jsx'
 import CommentItem from '../components/CommentItem.jsx'
+import CommentForm from '../components/CommentForm.jsx'
 
 function PostDetail() {
   const { id } = useParams()
@@ -34,6 +35,7 @@ function PostDetail() {
           <CommentItem key={c.id} {...c} />
         )) }
       </ul>
+      <CommentForm postId={id} onCreate={c => setComments([...comments, c])} />
     </>
   )
 }
