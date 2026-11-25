@@ -36,6 +36,7 @@ function PostDetail() {
             key={c.id}
             {...c}
             onDelete={id => setComments(comments.filter(x => x.id !== id))}
+            onUpdate={updated => setComments(comments.map(x => x.id === updated.id ? updated : x))}
           />
         )) }
       </ul>
