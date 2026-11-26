@@ -1,19 +1,22 @@
 import { api, SERVER_URL } from '../api.js'
 import { useState, useEffect } from 'react'
 import PostCard from '../components/PostCard.jsx'
+import { useAuth } from '../hooks/useAuth.jsx'
 
-function PostList() {
+function PostList({ path }) {
 
   // 게시물을 저장할 state 생성
   const [posts, setPosts] = useState([])
 
+  const { authApi } = useAuth()
+
   // 이 컴포넌트가 생성될때 외부에서 데이터 가져오기
   useEffect(() => { 
     async function load() {
-      setPosts(await api('/api/posts'))
+      setPosts(await authApi(path, {}))
     }
     load()
-  }, [])
+  }, [path])
 
   function handleUpdate(updated) {
     const newPosts = posts.map((post) => { 
@@ -29,7 +32,7 @@ function PostList() {
 
   return (
     <>
-      <h2>전체 게시물</h2>
+      <h2>{ path === '/api/posts/feed' ? '피드' : '전체 게시물' }</h2>
       {posts.length === 0 && <p>불러오는중</p>}
       
       <div>
