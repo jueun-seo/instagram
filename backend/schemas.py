@@ -62,7 +62,7 @@ class FollowingOut(BaseModel):
   to_user_id: int
 
 class ProfileOut(BaseModel):
-  id
-  username
-  followers
-  followings
+  id: int
+  username: str
+  followers: list[FollowerOut]
+  followings: list[FollowingOut]

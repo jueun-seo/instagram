@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router'
 import { api, SERVER_URL } from '../api.js'
+import { useAuth } from '../hooks/useAuth.jsx'
 
 function Profile () {
 
@@ -9,11 +10,13 @@ function Profile () {
     const [posts, setPosts] = useState([])
     const [error, setError] = useState('')
 
+    const auth = useAuth()
+
     useEffect(() => { 
         async function load() {
         try {
             setProfile(await api(`/api/users/${username}`))
-            setPosts(await api(`/api/users/${usernaame}/posts`))
+            setPosts(await api(`/api/users/${username}/posts`))
         } catch(e) {
           setError(e.message)
         }
@@ -25,12 +28,39 @@ function Profile () {
     if (error) return <p>{ error }</p>
     if (!profile) return <p>로딩중...</p>
 
+    const isMe = auth.user && auth.user.id === profile.id
+    const followed = auth.user && profile.followers.some((f) => {return f.from_user_id === auth.user.id})
+
+    async function handleFollow() {
+        try {
+            // 서버가 바뀐 프로필(팔로워 수 등)을 돌려준다
+            const updated = await auth.authApi(`/api/users/${username}/follow`, {
+                method: followed ? 'DELETE' : 'POST'
+            })
+            setProfile(updated)
+        } catch (e) {
+            setError(e.message)
+        }
+    }
+
     return(
         <>
       <div className="d-flex align-items-center gap-4 mb-4">
         <i className="bi bi-person-circle display-1"></i>
         <div>
-          <h2 className="h4">{profile.username}</h2>
+          
+          <div className="d-flex align-items-center gap-3 mb-2">
+            <h2 className="h4">{profile.username}</h2>
+            { auth.user && !isMe && (
+              <button
+                className={`btn btn-sm ${followed ? 'btn-outline-secondary' : 'btn-primary'}`}
+                onClick={ handleFollow }
+              >
+                { followed ? '팔로잉' : '팔로우' }
+              </button>
+            )}
+          </div>
+
           <div className="d-flex gap-3">
             <span>게시물 <b>{posts.length}</b></span>
             <span>팔로워 <b>{profile.followers.length}</b></span>

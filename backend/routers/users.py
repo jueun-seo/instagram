@@ -13,7 +13,7 @@ def get_user_or_404(username: str, db: SessionDep):
         raise HTTPException(status_code=404, detail='없는 사용자입니다.')
     return user
 
-UserDep = Annotatedl[User, Depends(get_user_or_404)]
+UserDep = Annotated[User, Depends(get_user_or_404)]
 
 @router.get('/{username}', response_model=ProfileOut)
 def profile(user: UserDep):
@@ -21,7 +21,7 @@ def profile(user: UserDep):
 
 @router.get('/{username}/posts')
 def user_posts(user: UserDep, db: SessionDep):
-    db.scalars(select(Post).where(Post.user_id == user.id))
+    return db.scalars(select(Post).where(Post.user_id == user.id)).all()
 
 @router.post('/{username}/follow', response_model=ProfileOut)
 def follow(user: UserDep, db: SessionDep, me: CurrentUserDep):
@@ -35,12 +35,12 @@ def follow(user: UserDep, db: SessionDep, me: CurrentUserDep):
     db.commit()
     return user
 
-@router.delete('/{username}/follow'):
+@router.delete('/{username}/follow', response_model=ProfileOut)
 def unfollow(user: UserDep, db: SessionDep, me: CurrentUserDep):
     row = db.get(Follow, (me.id, user.id))
     if row is None:
         raise HTTPException(status_code=404, detail='팔로우 하지 않았습니다.')
 
-    db.delete()
+    db.delete(row)
     db.commit()
     return user
