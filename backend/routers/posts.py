@@ -10,7 +10,7 @@ router = APIRouter(prefix='/api/posts', tags=['posts'])
 def post_list(db: SessionDep, skip: int = 0, limit: int = 10):
   posts = db.scalars(
     select(Post)
-    .order_by(Post.created_at.desc())
+    .order_by(Post.created_at.desc(), Post.id.desc())
     .offset(skip)
     .limit(limit)
     ).all()
@@ -27,6 +27,7 @@ def feed(db: SessionDep, me: CurrentUserDep, skip: int = 0, limit: int = 10):
   return db.scalars(
     select(Post)
     .where(Post.user_id.in_(ids))
+    .order_by(Post.created_at.desc(), Post.id.desc())
     .offset(skip)
     .limit(limit)
     ).all()
