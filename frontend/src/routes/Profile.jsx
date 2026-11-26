@@ -3,62 +3,60 @@ import { useParams, Link } from 'react-router'
 import { api, SERVER_URL } from '../api.js'
 import { useAuth } from '../hooks/useAuth.jsx'
 
-function Profile () {
 
-    const { username } = useParams()
-    const [profile, setProfile] = useState(null)
-    const [posts, setPosts] = useState([])
-    const [error, setError] = useState('')
 
-    const auth = useAuth()
+// /users/:username
+function Profile() { 
+  const { username } = useParams()
+  const [profile, setProfile] = useState(null)
+  const [posts, setPosts] = useState([])
+  const [error, setError] = useState('')
 
-    useEffect(() => { 
-        async function load() {
-        try {
-            setProfile(await api(`/api/users/${username}`))
-            setPosts(await api(`/api/users/${username}/posts`))
-        } catch(e) {
-          setError(e.message)
-        }
-        }
-        load()
-    
-    }, [username])
+  const auth = useAuth()
 
-    if (error) return <p>{ error }</p>
-    if (!profile) return <p>로딩중...</p>
-
-    const isMe = auth.user && auth.user.id === profile.id
-    const followed = auth.user && profile.followers.some((f) => {return f.from_user_id === auth.user.id})
-
-    async function handleFollow() {
-        try {
-            // 서버가 바뀐 프로필(팔로워 수 등)을 돌려준다
-            const updated = await auth.authApi(`/api/users/${username}/follow`, {
-                method: followed ? 'DELETE' : 'POST'
-            })
-            setProfile(updated)
-        } catch (e) {
-            setError(e.message)
-        }
+  useEffect(() => { 
+    async function load() {
+      try {
+        setProfile(await api(`/api/users/${username}`))
+        setPosts(await api(`/api/users/${username}/posts`))
+      } catch (e) {
+        setError(e.message)
+      }
     }
+    load()
 
-    return(
-        <>
+  }, [username])
+
+  if (error) return <p>{error}</p>
+  if (!profile) return <p>로딩중...</p>
+
+  const isMe = auth.user && auth.user.id == profile.id
+  const followed = auth.user && profile.followers.some((f) => { return f.from_user_id === auth.user.id })
+
+  async function handleFollow() {
+    const updated = await auth.authApi(`/api/users/${username}/follow`, {
+      method: followed ? 'DELETE' : 'POST'
+    })
+    // console.log(updated)
+    setProfile(updated)
+  }
+
+
+  return (
+    <>
       <div className="d-flex align-items-center gap-4 mb-4">
         <i className="bi bi-person-circle display-1"></i>
         <div>
-          
+
           <div className="d-flex align-items-center gap-3 mb-2">
             <h2 className="h4">{profile.username}</h2>
-            { auth.user && !isMe && (
-              <button
-                className={`btn btn-sm ${followed ? 'btn-outline-secondary' : 'btn-primary'}`}
-                onClick={ handleFollow }
-              >
-                { followed ? '팔로잉' : '팔로우' }
+            {auth.user && !isMe && (
+              <button className={followed ? 'btn btn-sm btn-outline-secondary' : 'btn btn-sm btn-outline-primary'}
+                onClick={handleFollow}>
+                {followed ? '팔로우취소' : '팔로우'}
               </button>
-            )}
+              
+            ) }
           </div>
 
           <div className="d-flex gap-3">
@@ -82,7 +80,7 @@ function Profile () {
         ))}
       </div>
     </>
-    )
+  )
 }
 
 export default Profile

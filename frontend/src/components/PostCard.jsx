@@ -9,9 +9,9 @@ function PostCard({ id, content, created_at, image_url, user, likes, onUpdate })
   const liked = auth.user && likes.some((like) => { return auth.user.id === like.user_id  })
 
   async function handleLike() { 
-    const updated = await api(`/api/posts/${id}/likes`, {
+    const updated = await auth.authApi(`/api/posts/${id}/likes`, {
       method: liked ? 'DELETE' : 'POST' ,
-      headers: {Authorization: `Bearer ${auth.token}`}
+      // headers: {Authorization: `Bearer ${auth.token}`}
     })
     // console.log(updated)
     onUpdate(updated)
@@ -21,7 +21,7 @@ function PostCard({ id, content, created_at, image_url, user, likes, onUpdate })
     <article className="card mb-4">
       <div className="card-header bg-white d-flex align-items-center gap-2">
         <i className="bi bi-person-circle fs-4"></i>
-        <b>{user.username}</b>
+        <Link className="text-reset text-decoration-none" to={`/users/${user.username}`}><b>{user.username}</b></Link>
       </div>
       {image_url && (
         <Link className="ratio ratio-1x1" to={`/posts/${id}`}>
@@ -38,7 +38,7 @@ function PostCard({ id, content, created_at, image_url, user, likes, onUpdate })
           </Link>
         </div>
         <p className="mb-1"><b>좋아요 {likes.length}개</b></p>
-        <p className="mb-1"><b>{user.username}</b> {content}</p>
+        <p className="mb-1"><Link className="text-reset text-decoration-none" to={`/users/${user.username}`}><b>{user.username}</b></Link> {content}</p>
         <small className="text-secondary">{new Date(created_at).toLocaleString('ko-KR')}</small>
       </div>
     </article>

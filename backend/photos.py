@@ -13,13 +13,13 @@ def save_photo(photo: UploadFile, x, y, width, height):
 
   image = ImageOps.exif_transpose(image)
 
-  #crop
+  # crop
   w, h = image.size
   left = round(w * x / 100)
   top = round(h * y / 100)
   right = round(w * (x + width) / 100)
   bottom = round(h * (y + height) / 100)
-  image = image.crop((left,top,right,bottom))
+  image = image.crop((left, top, right, bottom))
 
   image = ImageOps.fit(image, (1080, 1080))
   image = image.convert('RGB')

@@ -38,17 +38,18 @@ export function AuthProvider({ children }) {
     load()
   }, []) 
 
-  //로그인이 필요한 요청 => 401이면 새로운 토큰 발행받아서 한번 더 요청
+  // 로그인이 필요한 요청 => 401이면 새로운 토큰 발생받아서 한번더 요청
   async function authApi(path, options) {
     try {
-      return await api(path, {...options, headers: {...options.headers, Authorization: `Bearer ${token}`}})
+      return await api(path, { ...options, headers: {...options.headers, Authorization: `Bearer ${token}`} })
+    
     } catch (e) {
       if (e.status != 401) throw e
-
-      //401(인증에러)인데 refresh는 살아있다면 access를 재발행 해주는 => token state에 저장하는 코드 
-      const data = await api('/api/auth/refresh', {method: 'POST', credentials: 'include'})
+      
+      // 401(인증에러)인데 refresh는 살아있다면 access를 재발행 => token state에 저장
+      const data = await api('/api/auth/refresh', { method: 'POST', credentials: 'include' })
       setToken(data.access_token)
-      return await api(path, {...options, headers: {...options.headers, Authorization: `Bearer ${data.access_token}`}})
+      return await api(path, { ...options, headers: {...options.headers, Authorization: `Bearer ${data.access_token}`} })
     }
   }
   

@@ -53,10 +53,11 @@ with Session(engine) as db:
     Like(user_id=alice.id, post_id=p8.id),
     Like(user_id=bob.id, post_id=p8.id),
 
-    Follow(from_user_id=bob.id, to_user_id=alice.id), 
-    Follow(from_user_id=bob.id, to_user_id=carol.id), 
-    Follow(from_user_id=alice.id, to_user_id=bob.id), 
-    Follow(from_user_id=carol.id, to_user_id=alice.id), 
+    Follow(from_user_id=bob.id, to_user_id=alice.id),
+    Follow(from_user_id=bob.id, to_user_id=carol.id),
+    Follow(from_user_id=alice.id, to_user_id=bob.id),
+    Follow(from_user_id=carol.id, to_user_id=alice.id),
+        
   ])
   db.commit()
 

@@ -19,12 +19,13 @@ function App() {
             <Routes>
               <Route element={<RequireLogin/> }>
                 <Route path="/" element={<PostList />} />
-                <Route path="/posts/:id" element={ <PostDetail/>} />
-                <Route path="/new" element={<NewPost/>} />
-                <Route path="/users/:username" element={<Profile/>} />
+                <Route path="/posts/:id" element={<PostDetail />} />
+                <Route path="/new" element={<NewPost />} />
+                <Route path="/users/:username" element={ <Profile /> } />
               </Route>
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              
             </Routes>
           </main>
         </div>

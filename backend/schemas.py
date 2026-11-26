@@ -1,7 +1,6 @@
 from pydantic import BaseModel, Field
 from datetime import datetime
 
-
 class UserOut(BaseModel):
   id: int
   username: str
@@ -54,6 +53,7 @@ class CommentUpdate(BaseModel):
 
 class UploadOut(BaseModel):
   image_url: str
+
 
 class FollowerOut(BaseModel):
   from_user_id: int
